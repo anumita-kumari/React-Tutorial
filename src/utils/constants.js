@@ -3,3 +3,5 @@ export const CDN_URL =
 
 export const ITEM_URL =
   "https://www.swiggy.com/dapi/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=12.949756&lng=77.6997624&restaurantId=";
+
+//"https://www.swiggy.com/dapi/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=12.949756&lng=77.6997624&restaurantId=";
