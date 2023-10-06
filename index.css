@@ -1,4 +1,8 @@
-.header {
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* .header {
   height: 120px;
   width: 100%;
   border: 1px solid black;
@@ -83,4 +87,4 @@ h4 {
 }
 .user {
   border: 1px solid gray;
-}
+} */

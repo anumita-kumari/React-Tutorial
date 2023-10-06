@@ -1,5 +1,5 @@
 import { resList } from "../utils/mockData";
-import RestaurantCard from "./RestaurantCard";
+import RestaurantCard, { withPromotedRestaurant } from "./RestaurantCard";
 import { useEffect, useState } from "react";
 import ShimmerUI from "./ShimmerUI";
 import { Link } from "react-router-dom";
@@ -11,6 +11,7 @@ const AppMainContainer = () => {
   const [filteredRestaurants, setFilteredListOfRestaurants] = useState([]);
   //custom online hook
   const onlineStatus = useOnlineStatus();
+  const RestaurantCardPromoted = withPromotedRestaurant(RestaurantCard);
 
   useEffect(() => {
     fetchData();
@@ -49,15 +50,16 @@ const AppMainContainer = () => {
     <ShimmerUI />
   ) : (
     <div className="app-main-container">
-      <div className="search">
+      <div className="m-4 p-4">
         <input
-          className="search-input"
+          className="border border-solid border-black rounded-sm"
           value={searchText}
           onChange={(e) => {
             setSearchText(e.target.value);
           }}
         />
         <button
+          className="m-4 px-4 py-2 bg-green-100 rounded-lg"
           onClick={() => {
             const filteredListOfRestaurants = listOfRestaurants.filter((res) =>
               res.info.name.toLowerCase().includes(searchText.toLowerCase())
@@ -72,26 +74,31 @@ const AppMainContainer = () => {
         >
           Search
         </button>
+        <button
+          className="m-4 px-4 py-2 bg-green-100 rounded-lg"
+          onClick={() => {
+            filteredListOfRestaurants = listOfRestaurants.filter((res) => {
+              return res.info.avgRating > 4;
+            });
+            setFilteredListOfRestaurants(filteredListOfRestaurants);
+          }}
+        >
+          Top Rated restaurants
+        </button>
       </div>
-      <button
-        className="filter-btn"
-        onClick={() => {
-          filteredListOfRestaurants = listOfRestaurants.filter((res) => {
-            return res.info.avgRating > 4;
-          });
-          setFilteredListOfRestaurants(filteredListOfRestaurants);
-        }}
-      >
-        Top Rated restaurants
-      </button>
+
       {/* //not using keys not acceptable <<<< index as key(bad practice) <<<<<<<<< unique id (best practice) */}
-      <div className="restaurant-container">
+      <div className="flex flex-wrap">
         {filteredRestaurants.map((restaurant) => (
           <Link
             to={"/restaurant/" + restaurant.info.id}
             key={restaurant.info.id}
           >
-            <RestaurantCard resData={restaurant.info} />
+            {restaurant.info.isOpen ? (
+              <RestaurantCardPromoted resData={restaurant.info} />
+            ) : (
+              <RestaurantCard resData={restaurant.info} />
+            )}
           </Link>
         ))}
       </div>
