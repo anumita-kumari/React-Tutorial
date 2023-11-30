@@ -1,9 +1,10 @@
 import { resList } from "../utils/mockData";
 import RestaurantCard, { withPromotedRestaurant } from "./RestaurantCard";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ShimmerUI from "./ShimmerUI";
 import { Link } from "react-router-dom";
 import useOnlineStatus from "../utils/useOnlineStatus";
+import UserContext from "../utils/UserContext";
 
 const AppMainContainer = () => {
   const [listOfRestaurants, setListOfRestaurants] = useState([]);
@@ -11,6 +12,8 @@ const AppMainContainer = () => {
   const [filteredRestaurants, setFilteredListOfRestaurants] = useState([]);
   //custom online hook
   const onlineStatus = useOnlineStatus();
+
+  const { loggedInUser, setShowName } = useContext(UserContext);
   const RestaurantCardPromoted = withPromotedRestaurant(RestaurantCard);
 
   useEffect(() => {
@@ -23,16 +26,12 @@ const AppMainContainer = () => {
 
     const dataJson = await data.json();
 
-    console.log(
-      dataJson.data.cards[5].card.card.gridElements.infoWithStyle.restaurants[0]
-        .info
-    );
     setListOfRestaurants(
-      dataJson?.data?.cards[5]?.card?.card?.gridElements?.infoWithStyle
+      dataJson?.data?.cards[2]?.card?.card?.gridElements?.infoWithStyle
         ?.restaurants
     );
     setFilteredListOfRestaurants(
-      dataJson?.data?.cards[5]?.card?.card?.gridElements?.infoWithStyle
+      dataJson?.data?.cards[2]?.card?.card?.gridElements?.infoWithStyle
         ?.restaurants
     );
   };
@@ -46,7 +45,7 @@ const AppMainContainer = () => {
         Looks like you are offline. Please check your internet Connection.
       </h1>
     );
-  return listOfRestaurants.length === 0 ? (
+  return listOfRestaurants?.length === 0 ? (
     <ShimmerUI />
   ) : (
     <div className="app-main-container">
@@ -85,11 +84,18 @@ const AppMainContainer = () => {
         >
           Top Rated restaurants
         </button>
+        <label className="text-lg font-bold">User Name:</label>
+        <input
+          type="text"
+          className="border border-black"
+          value={loggedInUser}
+          onChange={(e) => setShowName(e.target.value)}
+        />
       </div>
 
       {/* //not using keys not acceptable <<<< index as key(bad practice) <<<<<<<<< unique id (best practice) */}
       <div className="flex flex-wrap">
-        {filteredRestaurants.map((restaurant) => (
+        {filteredRestaurants?.map((restaurant) => (
           <Link
             to={"/restaurant/" + restaurant.info.id}
             key={restaurant.info.id}

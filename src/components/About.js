@@ -1,6 +1,7 @@
 import { Component } from "react";
 import User from "./User";
 import UserClass from "./UserClass";
+import userContext from "../utils/UserContext";
 
 class About extends Component {
   constructor() {
@@ -17,27 +18,27 @@ class About extends Component {
   async componentDidMount() {
     const data = await fetch("https://api.github.com/users/anumita-kumari");
     const json = await data?.json();
-    console.log(json);
+    //console.log(json);
     this.setState({
       nameInfo: json,
     });
 
-    this.timer = setInterval(() => {
-      console.log("Namste React OP");
-    }, 1000);
-    console.log("Parent Component Did Mount called");
+    // this.timer = setInterval(() => {
+    //   console.log("Namste React OP");
+    // }, 1000);
+    //console.log("Parent Component Did Mount called");
   }
   componentDidUpdate() {
-    console.log("Parent Component Did Update called");
+    //console.log("Parent Component Did Update called");
   }
   componentWillUnmount() {
     clearInterval(this.timer);
-    console.log("Parent Component Will Unmount called");
+    //console.log("Parent Component Will Unmount called");
   }
   render() {
     const { login, location, avatar_url } = this.state.nameInfo;
-    console.log("Parent Render called");
-    console.log(this.state);
+    //console.log("Parent Render called");
+    //console.log(this.state);
     return (
       <div>
         <h1>This is Namste React Web Series</h1>
@@ -48,6 +49,9 @@ class About extends Component {
           address={"Ramkrishna Nagar"}
           location={"Patna"}
         />
+        <userContext.Consumer>
+          {({ loggedInUser }) => <h1>Welcome {loggedInUser}</h1>}
+        </userContext.Consumer>
         {/* <UserClass name={login} address={"Bangalore"} location={location} /> */}
       </div>
     );
